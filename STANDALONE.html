@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎫 Accord Events Registration System</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .company-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        /* Main content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Button styles */
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        /* Notification */
+        .notification {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .notification.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .notification.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .footer-content {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .footer-text {
+            animation: heartbeat 2s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiByeD0iMTAiIGZpbGw9IiM2NjdlZWEiLz4KPHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxNSIgeT0iMTUiPgo8cGF0aCBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwUzE3LjUyIDIgMTIgMnptLTIgMTV2LTJoNnYySDEweiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cjwvc3ZnPgo=" alt="Accord Logo" class="company-logo">
+            <h1>Accord for Exhibitions and Conferences Registration System</h1>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Registration Section -->
+            <div class="section">
+                <h2>📝 Registration</h2>
+                <div class="form-group">
+                    <label for="attendeeName">Attendee Name:</label>
+                    <input type="text" id="attendeeName" placeholder="Enter full name">
+                </div>
+                <div class="form-group">
+                    <label for="attendeePhone">Phone Number:</label>
+                    <input type="tel" id="attendeePhone" placeholder="Enter phone number">
+                </div>
+                <div class="form-group">
+                    <label for="registrationType">Registration Type:</label>
+                    <select id="registrationType">
+                        <option value="official">Official Attendee</option>
+                        <option value="walkin">Walk-in Registration</option>
+                    </select>
+                </div>
+                <button class="btn btn-success" onclick="registerAttendee()">Register Attendee</button>
+            </div>
+
+            <!-- Reports Section -->
+            <div class="section">
+                <h2>📊 Reports & Data</h2>
+                <div class="form-group">
+                    <label>Total Registrations: <span id="totalRegistrations">0</span></label>
+                </div>
+                <div class="form-group">
+                    <label>Official Attendees: <span id="officialCount">0</span></label>
+                </div>
+                <div class="form-group">
+                    <label>Walk-in Registrations: <span id="walkinCount">0</span></label>
+                </div>
+                <button class="btn btn-warning" onclick="printBadges()">Print Badges</button>
+                <button class="btn btn-warning" onclick="printCertificates()">Print Certificates</button>
+                <button class="btn btn-danger" onclick="resetSystem()">Reset System</button>
+            </div>
+        </div>
+
+        <!-- Notification Area -->
+        <div id="notification" class="notification"></div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-content">
+                <div class="footer-text">Made with ❤️ by Mostafa Tarek ElFar</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple data storage using localStorage
+        let registrations = JSON.parse(localStorage.getItem('registrations') || '[]');
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function registerAttendee() {
+            const name = document.getElementById('attendeeName').value.trim();
+            const phone = document.getElementById('attendeePhone').value.trim();
+            const type = document.getElementById('registrationType').value;
+
+            if (!name || !phone) {
+                showNotification('Please fill in all fields!', 'error');
+                return;
+            }
+
+            const registration = {
+                id: Date.now(),
+                name: name,
+                phone: phone,
+                type: type,
+                timestamp: new Date().toISOString()
+            };
+
+            registrations.push(registration);
+            localStorage.setItem('registrations', JSON.stringify(registrations));
+
+            // Clear form
+            document.getElementById('attendeeName').value = '';
+            document.getElementById('attendeePhone').value = '';
+
+            showNotification(`${name} registered successfully!`);
+            updateCounts();
+        }
+
+        function updateCounts() {
+            const total = registrations.length;
+            const official = registrations.filter(r => r.type === 'official').length;
+            const walkin = registrations.filter(r => r.type === 'walkin').length;
+
+            document.getElementById('totalRegistrations').textContent = total;
+            document.getElementById('officialCount').textContent = official;
+            document.getElementById('walkinCount').textContent = walkin;
+        }
+
+        function printBadges() {
+            if (registrations.length === 0) {
+                showNotification('No registrations to print!', 'error');
+                return;
+            }
+            
+            const printWindow = window.open('', '_blank');
+            let html = `
+                <html>
+                <head><title>Badges</title></head>
+                <body style="font-family: Arial, sans-serif;">
+                    <h1>Event Badges</h1>
+            `;
+            
+            registrations.forEach(reg => {
+                html += `
+                    <div style="border: 2px solid #333; padding: 20px; margin: 10px; text-align: center;">
+                        <h2>${reg.name}</h2>
+                        <p>${reg.phone}</p>
+                        <p>${reg.type === 'official' ? 'Official Attendee' : 'Walk-in Registration'}</p>
+                    </div>
+                `;
+            });
+            
+            html += '</body></html>';
+            printWindow.document.write(html);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function printCertificates() {
+            if (registrations.length === 0) {
+                showNotification('No registrations to print!', 'error');
+                return;
+            }
+            
+            const printWindow = window.open('', '_blank');
+            let html = `
+                <html>
+                <head><title>Certificates</title></head>
+                <body style="font-family: Arial, sans-serif;">
+                    <h1>Attendance Certificates</h1>
+            `;
+            
+            registrations.forEach(reg => {
+                html += `
+                    <div style="border: 2px solid #333; padding: 40px; margin: 20px; text-align: center;">
+                        <h1>Certificate of Attendance</h1>
+                        <h2>This is to certify that</h2>
+                        <h3>${reg.name}</h3>
+                        <p>has attended the event</p>
+                        <p>Date: ${new Date(reg.timestamp).toLocaleDateString()}</p>
+                    </div>
+                `;
+            });
+            
+            html += '</body></html>';
+            printWindow.document.write(html);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function resetSystem() {
+            if (confirm('Are you sure you want to reset all data? This cannot be undone!')) {
+                registrations = [];
+                localStorage.removeItem('registrations');
+                updateCounts();
+                showNotification('System reset successfully!');
+            }
+        }
+
+        // Initialize on page load
+        updateCounts();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,31 @@
+🎫 ACCORD EVENTS REGISTRATION SYSTEM
+=====================================
+
+📋 HOW TO USE (SUPER EASY!)
+============================
+
+Step 1: Double-click on "start.sh" file
+Step 2: Wait for the message "Serving HTTP on :: port 8000"
+Step 3: Your browser will automatically open to the registration system
+Step 4: To stop the program, press Ctrl+C in the terminal window
+
+⚠️ IMPORTANT: Keep the terminal window open while using the software!
+
+📁 WHAT TO SEND TO YOUR FRIEND:
+===============================
+
+Just copy this entire folder to a USB drive and give it to them!
+They only need to:
+1. Copy the folder to their computer
+2. Double-click "start.sh"
+3. That's it!
+
+🌐 ACCESS FROM OTHER DEVICES:
+============================
+
+Once running, other devices on the same network can access it at:
+http://[your-computer-ip]:8000
+
+The IP address will be shown in the terminal when you start the program.
+
+💝 Made with ❤️ by Mostafa Tarek ElFar 

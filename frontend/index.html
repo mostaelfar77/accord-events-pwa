@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accord Events - Registration System</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4a90e2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Accord Events">
+    <link rel="apple-touch-icon" href="accord-logo.jpg">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="logo">
+                    <img src="accord-logo.jpg" alt="Accord Logo" class="company-logo">
+                    <h1>Accord for Exhibitions and Conferences Registration System</h1>
+                </div>
+                <div class="header-actions">
+                    <button id="darkModeToggle" class="btn btn-secondary dark-mode-toggle">
+                        <i class="fas fa-moon"></i>
+                        <span class="toggle-text">Dark Mode</span>
+                    </button>
+                    <button id="resetBtn" class="btn btn-danger">
+                        <i class="fas fa-redo"></i>
+                        Reset System
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="container">
+                <!-- Upload Section -->
+                <section class="upload-section" id="uploadSection">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-upload"></i> Upload Attendees List</h2>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="upload-area" id="uploadArea">
+                                <div class="upload-content">
+                                    <i class="fas fa-file-excel"></i>
+                                    <h3>Upload Excel File</h3>
+                                    <p>Drag and drop your Excel file here or click to browse</p>
+                                    <p class="file-format">Format: Name | Phone Number</p>
+                                    <input type="file" id="fileInput" accept=".xlsx,.xls" hidden>
+                                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                                        Choose File
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="upload-status" id="uploadStatus" style="display: none;">
+                                <div class="status-content">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span id="statusText">File uploaded successfully!</span>
+                                    <span id="attendeeCount"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Registration Section -->
+                <section class="registration-section" id="registrationSection" style="display: none;">
+                    <div class="registration-grid">
+                        <!-- Official Attendees Section -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fas fa-user-check"></i> Official Attendees</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="search-container">
+                                    <div class="search-box">
+                                        <input type="text" id="officialNameInput" placeholder="Type attendee name or phone number..." autocomplete="off">
+                                    </div>
+                                    <button class="btn btn-primary" id="registerOfficialBtn">
+                                        <i class="fas fa-check"></i>
+                                        Register Official
+                                    </button>
+                                </div>
+                                <div class="section-info">
+                                    <p><i class="fas fa-info-circle"></i> Search for attendees by name or phone number in the official list</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Walk-in Attendees Section -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fas fa-user-plus"></i> Walk-in Registration</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="walk-in-form">
+                                    <div class="form-group">
+                                        <label for="walkInNameInput">Name:</label>
+                                        <input type="text" id="walkInNameInput" placeholder="Enter full name" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="walkInPhoneInput">Phone Number:</label>
+                                        <input type="text" id="walkInPhoneInput" placeholder="Enter phone number" maxlength="15">
+                                    </div>
+                                    <button class="btn btn-success" id="registerWalkInBtn">
+                                        <i class="fas fa-user-plus"></i>
+                                        Register Walk-in
+                                    </button>
+                                </div>
+                                <div class="section-info">
+                                    <p><i class="fas fa-info-circle"></i> For attendees not in the official list</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Event Settings Section -->
+                <section class="event-settings-section" id="eventSettingsSection" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-cog"></i> Event Settings</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="event-form">
+                                <div class="form-group">
+                                    <label for="eventNameInput">Event Name:</label>
+                                    <input type="text" id="eventNameInput" placeholder="Enter event name (e.g., Tech Conference 2024)" value="Accord Events">
+                                    <p class="form-help">This name will appear on badges and certificates</p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="certificateTemplateInput">Certificate Template (JPEG):</label>
+                                    <input type="file" id="certificateTemplateInput" accept="image/jpeg">
+                                    <p class="form-help">Upload a JPEG of your pre-printed certificate (A4 landscape). This will be used as the background for printed certificates.</p>
+                                </div>
+                                <div class="form-group" id="certificateTemplatePreviewGroup" style="display:none;">
+                                    <label>Template Preview & Name Placement:</label>
+                                    <div id="certificateTemplatePreviewContainer" style="position:relative; width:100%; max-width:800px; aspect-ratio: 297/210; border:1px solid #ccc; background:#f9f9f9; margin-bottom:1rem;">
+                                        <img id="certificateTemplatePreview" src="" alt="Certificate Template Preview" style="width:100%; display:block;">
+                                        <div id="namePlacementBox" style="position:absolute; border:2px dashed #007bff; background:rgba(0,123,255,0.1); cursor:move; display:none;"></div>
+                                    </div>
+                                    <p class="form-help">Drag and resize the box to set where the attendee name should appear on the certificate.</p>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        Use pre-printed certificates (print names only)
+                                        <input type="checkbox" id="prePrintedCertificatesCheckbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <p class="form-help">When enabled, only the attendee name will be printed on your pre-printed colored certificates. Perfect for black ink printers.</p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="badgeTemplateInput">Badge Template (JPEG):</label>
+                                    <input type="file" id="badgeTemplateInput" accept="image/jpeg">
+                                    <p class="form-help">Upload a JPEG of your pre-printed badge (typically 3.5" x 2.25"). This will be used as the background for printed badges.</p>
+                                </div>
+                                <div class="form-group" id="badgeTemplatePreviewGroup" style="display:none;">
+                                    <label>Badge Template Preview & Name Placement:</label>
+                                    <div id="badgeTemplatePreviewContainer" style="position:relative; width:100%; max-width:600px; aspect-ratio: 18/13; border:1px solid #ccc; background:#f9f9f9; margin-bottom:1rem;">
+                                        <img id="badgeTemplatePreview" src="" alt="Badge Template Preview" style="width:100%; display:block;">
+                                        <div id="badgeNamePlacementBox" style="position:absolute; border:2px dashed #28a745; background:rgba(40,167,69,0.1); cursor:move; display:none;"></div>
+                                    </div>
+                                    <p class="form-help">Drag and resize the box to set where the attendee name should appear on the badge.</p>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        Use pre-printed badges (print names only)
+                                        <input type="checkbox" id="prePrintedBadgesCheckbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <p class="form-help">When enabled, only the attendee name will be printed on your pre-printed colored badges. Perfect for black ink printers.</p>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        Auto-print badge when someone registers
+                                        <input type="checkbox" id="autoPrintBadgesCheckbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <p class="form-help">When enabled, a badge will automatically print for each person as they register. Perfect for events where badges are handed out immediately.</p>
+                                </div>
+                                <button class="btn btn-primary" id="saveEventBtn">
+                                    <i class="fas fa-save"></i>
+                                    Save Event Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reports Section -->
+                <section class="reports-section" id="reportsSection" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-chart-bar"></i> Reports & Data</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="reports-grid">
+                                <div class="report-card">
+                                    <h3>Attendance Summary</h3>
+                                    <div class="stats">
+                                        <div class="stat">
+                                            <span class="stat-number" id="totalAttendees">0</span>
+                                            <span class="stat-label">Total Registered</span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-number" id="officialAttendees">0</span>
+                                            <span class="stat-label">Official</span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-number" id="walkInAttendees">0</span>
+                                            <span class="stat-label">Walk-ins</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="report-card">
+                                    <h3>Actions</h3>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-primary" id="downloadReportBtn">
+                                            <i class="fas fa-download"></i>
+                                            Download Report
+                                        </button>
+                                        <button class="btn btn-success" id="exportDataBtn">
+                                            <i class="fas fa-save"></i>
+                                            Export Data
+                                        </button>
+                                        <button class="btn btn-warning" id="importDataBtn">
+                                            <i class="fas fa-upload"></i>
+                                            Import Data
+                                        </button>
+                                        <button class="btn btn-secondary" id="printBadgesBtn">
+                                            <i class="fas fa-print"></i>
+                                            Print Badges
+                                        </button>
+                                        <button class="btn btn-secondary" id="printCertificatesBtn">
+                                            <i class="fas fa-certificate"></i>
+                                            Print Certificates
+                                        </button>
+                                        <button class="btn btn-info" id="searchCertificateBtn">
+                                            <i class="fas fa-search"></i>
+                                            Search & Print Certificate
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Registration Timeline Chart -->
+                            <div class="timeline-container" id="registrationTimeline">
+                                <!-- Chart will be generated here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Enhanced Autocomplete Dropdown -->
+        <div class="autocomplete-dropdown" id="autocompleteDropdown">
+            <div class="autocomplete-content">
+                <button class="autocomplete-close" id="closeAutocomplete">&times;</button>
+                <div class="autocomplete-header">
+                    <h3>Select Attendee</h3>
+                </div>
+                <div class="autocomplete-list" id="autocompleteList"></div>
+            </div>
+        </div>
+
+        <!-- Modal for Duplicate Names -->
+        <div class="modal" id="duplicateModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Multiple Attendees Found</h3>
+                    <button class="modal-close" id="closeDuplicateModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Multiple attendees with the same name found. Please select the correct person:</p>
+                    <div class="duplicate-list" id="duplicateList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificate Search Modal -->
+        <div class="modal" id="certificateSearchModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Search & Print Certificate</h3>
+                    <button class="modal-close" id="closeCertificateSearchModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="certificateSearchInput">Search for registered attendee:</label>
+                        <input type="text" id="certificateSearchInput" placeholder="Enter attendee name..." autocomplete="off">
+                        <div class="certificate-search-results" id="certificateSearchResults"></div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn btn-primary" id="printIndividualCertificateBtn" disabled>
+                            <i class="fas fa-print"></i>
+                            Print Certificate
+                        </button>
+                        <button class="btn btn-secondary" id="cancelCertificateSearchBtn">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificate Filter Modal -->
+        <div class="modal" id="certificateFilterModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Print Certificates</h3>
+                    <button class="modal-close" id="closeCertificateFilterModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Choose which certificates to print:</label>
+                        <div class="filter-options">
+                            <label class="radio-label">
+                                <input type="radio" name="certificateFilter" value="all" checked>
+                                <span class="radio-custom"></span>
+                                All attendees (Official + Walk-in)
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="certificateFilter" value="official">
+                                <span class="radio-custom"></span>
+                                Official attendees only
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="certificateFilter" value="walkin">
+                                <span class="radio-custom"></span>
+                                Walk-in attendees only
+                            </label>
+                        </div>
+                        <div class="filter-summary" id="certificateFilterSummary">
+                            <!-- Summary will be populated here -->
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn btn-primary" id="confirmCertificatePrintBtn">
+                            <i class="fas fa-print"></i>
+                            Print Certificates
+                        </button>
+                        <button class="btn btn-secondary" id="cancelCertificateFilterBtn">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reset Confirmation Modal -->
+        <div class="modal" id="resetModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Reset System</h3>
+                    <button class="modal-close" id="closeResetModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="reset-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Are you sure you want to reset the system?</p>
+                        <p class="warning-text">This will clear all attendance data, reports, and registration records.</p>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn btn-danger" id="confirmResetBtn">
+                            <i class="fas fa-redo"></i>
+                            Yes, Reset System
+                        </button>
+                        <button class="btn btn-secondary" id="cancelResetBtn">
+                            <i class="fas fa-times"></i>
+                            No, Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Notification -->
+        <div class="notification" id="successNotification">
+            <div class="notification-content">
+                <i class="fas fa-check-circle"></i>
+                <span id="notificationText">Registration successful!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-text">
+                    Made with <i class="fas fa-heart"></i> by <strong>Mostafa Tarek ElFar</strong>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+</html> 
