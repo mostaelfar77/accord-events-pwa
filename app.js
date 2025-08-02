@@ -249,6 +249,8 @@ class AccordEventsApp {
         
         // Certificate placement box drag/resize
         let drag = false, resize = false, startX, startY, startLeft, startTop, startWidth, startHeight;
+        
+        // Mouse events for desktop
         placementBox.addEventListener('mousedown', (e) => {
             const rect = placementBox.getBoundingClientRect();
             const isResizeArea = e.clientX > rect.right - 16 && e.clientY > rect.bottom - 16;
@@ -269,8 +271,32 @@ class AccordEventsApp {
             e.preventDefault();
         });
         
+        // Touch events for mobile
+        placementBox.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            const rect = placementBox.getBoundingClientRect();
+            const isResizeArea = touch.clientX > rect.right - 16 && touch.clientY > rect.bottom - 16;
+            
+            if (isResizeArea) {
+                resize = true;
+            } else {
+                drag = true;
+            }
+            
+            startX = touch.clientX;
+            startY = touch.clientY;
+            startLeft = placementBox.offsetLeft;
+            startTop = placementBox.offsetTop;
+            startWidth = placementBox.offsetWidth;
+            startHeight = placementBox.offsetHeight;
+            placementBox.classList.add('active');
+            e.preventDefault();
+        });
+        
         // Badge placement box drag/resize
         let badgeDrag = false, badgeResize = false, badgeStartX, badgeStartY, badgeStartLeft, badgeStartTop, badgeStartWidth, badgeStartHeight;
+        
+        // Mouse events for desktop
         badgePlacementBox.addEventListener('mousedown', (e) => {
             const rect = badgePlacementBox.getBoundingClientRect();
             const isResizeArea = e.clientX > rect.right - 16 && e.clientY > rect.bottom - 16;
@@ -283,6 +309,28 @@ class AccordEventsApp {
             
             badgeStartX = e.clientX;
             badgeStartY = e.clientY;
+            badgeStartLeft = badgePlacementBox.offsetLeft;
+            badgeStartTop = badgePlacementBox.offsetTop;
+            badgeStartWidth = badgePlacementBox.offsetWidth;
+            badgeStartHeight = badgePlacementBox.offsetHeight;
+            badgePlacementBox.classList.add('active');
+            e.preventDefault();
+        });
+        
+        // Touch events for mobile
+        badgePlacementBox.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            const rect = badgePlacementBox.getBoundingClientRect();
+            const isResizeArea = touch.clientX > rect.right - 16 && touch.clientY > rect.bottom - 16;
+            
+            if (isResizeArea) {
+                badgeResize = true;
+            } else {
+                badgeDrag = true;
+            }
+            
+            badgeStartX = touch.clientX;
+            badgeStartY = touch.clientY;
             badgeStartLeft = badgePlacementBox.offsetLeft;
             badgeStartTop = badgePlacementBox.offsetTop;
             badgeStartWidth = badgePlacementBox.offsetWidth;
@@ -354,6 +402,82 @@ class AccordEventsApp {
         });
         
         document.addEventListener('mouseup', () => {
+            drag = false;
+            resize = false;
+            badgeDrag = false;
+            badgeResize = false;
+            placementBox.classList.remove('active');
+            badgePlacementBox.classList.remove('active');
+        });
+        
+        // Touch move for mobile
+        document.addEventListener('touchmove', (e) => {
+            if (!drag && !resize && !badgeDrag && !badgeResize) return;
+            
+            const touch = e.touches[0];
+            const dx = touch.clientX - startX;
+            const dy = touch.clientY - startY;
+            
+            // Handle certificate placement box
+            if (drag || resize) {
+                const container = previewContainer;
+                if (drag) {
+                    let newLeft = startLeft + dx;
+                    let newTop = startTop + dy;
+                    
+                    // Constrain to container bounds
+                    newLeft = Math.max(0, Math.min(newLeft, container.offsetWidth - startWidth));
+                    newTop = Math.max(0, Math.min(newTop, container.offsetHeight - startHeight));
+                    
+                    placementBox.style.left = newLeft + 'px';
+                    placementBox.style.top = newTop + 'px';
+                } else if (resize) {
+                    let newWidth = Math.max(40, startWidth + dx);
+                    let newHeight = Math.max(24, startHeight + dy);
+                    
+                    // Constrain to container bounds
+                    newWidth = Math.min(newWidth, container.offsetWidth - startLeft);
+                    newHeight = Math.min(newHeight, container.offsetHeight - startTop);
+                    
+                    placementBox.style.width = newWidth + 'px';
+                    placementBox.style.height = newHeight + 'px';
+                }
+            }
+            
+            // Handle badge placement box
+            if (badgeDrag || badgeResize) {
+                const badgeContainer = badgePreviewContainer;
+                const badgeDx = touch.clientX - badgeStartX;
+                const badgeDy = touch.clientY - badgeStartY;
+                
+                if (badgeDrag) {
+                    let newLeft = badgeStartLeft + badgeDx;
+                    let newTop = badgeStartTop + badgeDy;
+                    
+                    // Constrain to container bounds
+                    newLeft = Math.max(0, Math.min(newLeft, badgeContainer.offsetWidth - badgeStartWidth));
+                    newTop = Math.max(0, Math.min(newTop, badgeContainer.offsetHeight - badgeStartHeight));
+                    
+                    badgePlacementBox.style.left = newLeft + 'px';
+                    badgePlacementBox.style.top = newTop + 'px';
+                } else if (badgeResize) {
+                    let newWidth = Math.max(40, badgeStartWidth + badgeDx);
+                    let newHeight = Math.max(24, badgeStartHeight + badgeDy);
+                    
+                    // Constrain to container bounds
+                    newWidth = Math.min(newWidth, badgeContainer.offsetWidth - badgeStartLeft);
+                    newHeight = Math.min(newHeight, badgeContainer.offsetHeight - badgeStartTop);
+                    
+                    badgePlacementBox.style.width = newWidth + 'px';
+                    badgePlacementBox.style.height = newHeight + 'px';
+                }
+            }
+            
+            e.preventDefault(); // Prevent scrolling while dragging
+        });
+        
+        // Touch end for mobile
+        document.addEventListener('touchend', () => {
             drag = false;
             resize = false;
             badgeDrag = false;
