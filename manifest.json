@@ -2,7 +2,7 @@
   "name": "Accord Events Registration",
   "short_name": "Accord Events",
   "description": "Professional event registration system for conferences and exhibitions",
-  "start_url": "/",
+  "start_url": "/accord-events-pwa/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4a90e2",
